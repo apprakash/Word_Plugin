@@ -80,7 +80,17 @@
             
             <!-- Past conversations section -->
             <div class="past-conversations-container">
-                <h2 class="ms-font-l">Past Conversations</h2>
+                <div class="past-conversations-header">
+                    <h2 class="ms-font-l">Past Conversations</h2>
+                    <div class="past-conversations-controls">
+                        <button id="clear-all-conversations" class="ms-Button ms-Button--icon" title="Clear all conversations">
+                            <span class="ms-Button-icon"><i class="ms-Icon ms-Icon--Delete"></i></span>
+                        </button>
+                        <button id="toggle-conversations" class="ms-Button ms-Button--icon" title="Hide/Show conversations">
+                            <span class="ms-Button-icon"><i class="ms-Icon ms-Icon--ChevronDown"></i></span>
+                        </button>
+                    </div>
+                </div>
                 <ul id="past-conversations" class="past-conversations-list">
                     <!-- Past conversations will be populated here dynamically -->
                 </ul>

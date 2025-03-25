@@ -206,10 +206,55 @@ body {
     border-top: 1px solid #e0e0e0;
     max-height: 150px;
     overflow-y: auto;
+    transition: max-height 0.3s ease;
 }
 
-.past-conversations-container h2 {
-    margin: 0 0 8px;
+.past-conversations-container.hidden {
+    max-height: 40px;
+    overflow: hidden;
+}
+
+.past-conversations-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.past-conversations-controls {
+    display: flex;
+    gap: 4px;
+}
+
+.past-conversations-controls .ms-Button--icon {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.past-conversations-controls .ms-Button--icon:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.past-conversations-controls .ms-Icon {
+    font-size: 16px;
+    color: #666;
+}
+
+.past-conversations-container.hidden .ms-Icon--ChevronDown {
+    transform: rotate(180deg);
+}
+
+.past-conversations-header h2 {
+    margin: 0;
     font-size: 14px;
     font-weight: 600;
     color: #333;
