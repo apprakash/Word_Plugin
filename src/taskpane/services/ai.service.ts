@@ -1,20 +1,13 @@
-// AI service for handling interactions with Anthropic
 import Anthropic from "@anthropic-ai/sdk";
 import { ToolOperation } from '../models/interfaces';
 
-// Hardcoded API key as per user preference
-const API_KEY = "";
-
-/**
- * Get AI response from Anthropic's Claude
- */
-export async function getAIResponse(userRequest: string, documentContent: string): Promise<{
+export async function getAIResponse(userRequest: string, documentContent: string, apiKey: string): Promise<{
   aiResponse: string;
   toolOperations: ToolOperation[];
 }> {
   try {
     const anthropic = new Anthropic({
-      apiKey: API_KEY,
+      apiKey: apiKey,
       dangerouslyAllowBrowser: true,
     });
 

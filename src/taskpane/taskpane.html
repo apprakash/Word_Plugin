@@ -25,52 +25,75 @@
         <h2 class="ms-font-xl">Please <a target="_blank" href="https://learn.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing">sideload</a> your add-in to see app body.</h2>
     </section>
     
-    <main id="app-body" class="chat-container" style="display: none;">
-        <!-- Header with AskJunior Assistant title -->
+    <!-- API Key Input Form -->
+    <div id="api-key-container" class="api-key-container" style="display: none;">
         <header class="chat-header">
             <h1 class="ms-font-xl">AskJunior Assistant</h1>
-            <p class="ms-font-m">Your document drafting helper</p>
+            <p class="ms-font-m">Please enter your Anthropic API key to continue</p>
         </header>
         
-        <!-- Chat messages area -->
-        <div id="chat-messages" class="chat-messages">
-            <div class="message assistant">
-                <div class="message-content">
-                    Hello! I'm AskJunior Assistant. How can I help with your document today?
+        <form id="api-key-form" class="api-key-form">
+            <div class="ms-TextField">
+                <label class="ms-Label" for="api-key-input">Anthropic API Key</label>
+                <input id="api-key-input" class="ms-TextField-field" type="password" placeholder="Enter your API key here" required>
+            </div>
+            <button type="submit" class="ms-Button ms-Button--primary">
+                <span class="ms-Button-label">Save API Key</span>
+            </button>
+            <p class="ms-font-s api-key-info">
+                You can get an API key from <a href="https://console.anthropic.com/keys" target="_blank">Anthropic Console</a>
+            </p>
+        </form>
+    </div>
+    
+    <div id="app-body" style="display: none;">
+        <main id="chat-container" class="chat-container">
+            <!-- Header with AskJunior Assistant title -->
+            <header class="chat-header">
+                <h1 class="ms-font-xl">AskJunior Assistant</h1>
+                <p class="ms-font-m">Your document drafting helper</p>
+            </header>
+            
+            <!-- Chat messages area -->
+            <div id="chat-messages" class="chat-messages">
+                <div class="message assistant">
+                    <div class="message-content">
+                        Hello! I'm AskJunior Assistant. How can I help with your document today?
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Message template (hidden, used for cloning) -->
-        <template id="message-template">
-            <div class="message">
-                <div class="message-content"></div>
+            
+            <!-- Message template (hidden, used for cloning) -->
+            <template id="message-template">
+                <div class="message">
+                    <div class="message-content"></div>
+                </div>
+            </template>
+            
+            <!-- Chat input area -->
+            <div class="chat-input-container">
+                <textarea id="chat-input" class="chat-input" placeholder="Type your message here..."></textarea>
+                <button id="send-message" class="ms-Button ms-Button--primary">
+                    <span class="ms-Button-label">Send</span>
+                </button>
             </div>
-        </template>
-        
-        <!-- Chat input area -->
-        <div class="chat-input-container">
-            <textarea id="chat-input" class="chat-input" placeholder="Type your message here..."></textarea>
-            <button id="send-message" class="ms-Button ms-Button--primary">
-                <span class="ms-Button-label">Send</span>
-            </button>
-        </div>
-        
-        <!-- Past conversations section -->
-        <div class="past-conversations-container">
-            <h2 class="ms-font-l">Past Conversations</h2>
-            <ul id="past-conversations" class="past-conversations-list">
-                <!-- Past conversations will be populated here dynamically -->
-            </ul>
-        </div>
+            
+            <!-- Past conversations section -->
+            <div class="past-conversations-container">
+                <h2 class="ms-font-l">Past Conversations</h2>
+                <ul id="past-conversations" class="past-conversations-list">
+                    <!-- Past conversations will be populated here dynamically -->
+                </ul>
+            </div>
 
-        <!-- New conversation button -->
-        <div class="new-conversation-container">
-            <button id="new-chat" class="ms-Button ms-Button--primary new-conversation-button">
-                <span class="ms-Button-label">New Conversation</span>
-            </button>
-        </div>
-    </main>
+            <!-- New conversation button -->
+            <div class="new-conversation-container">
+                <button id="new-chat" class="ms-Button ms-Button--primary new-conversation-button">
+                    <span class="ms-Button-label">New Conversation</span>
+                </button>
+            </div>
+        </main>
+    </div>
 </body>
 
 </html>

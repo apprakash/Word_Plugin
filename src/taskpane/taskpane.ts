@@ -2,15 +2,17 @@
 // Import services
 import { getAIResponse } from './services/ai.service';
 import { getDocumentContent, insertResponseToDocument } from './services/document.service';
-import { createNewConversation, addMessageToConversation, loadPastConversations, getCurrentConversation } from './services/conversation.service';
+import { createNewConversation, addMessageToConversation, loadPastConversations } from './services/conversation.service';
 import { addMessageToUI, renderCurrentConversation, updatePastConversationsUI } from './services/ui.service';
 import { processToolOperations } from './services/tool.service';
 import { ChatMessage } from './models/interfaces';
 
+// API Key storage key
+const API_KEY_STORAGE_KEY = 'anthropic_api_key';
+
 Office.onReady((info) => {
   if (info.host === Office.HostType.Word) {
     document.getElementById("sideload-msg").style.display = "none";
-    document.getElementById("app-body").style.display = "flex";
     initializeChatInterface();
   }
 });
@@ -27,6 +29,9 @@ function initializeChatInterface(): void {
   
   // Update the past conversations UI
   updatePastConversationsUI();
+
+  // Check if API key exists and show appropriate UI
+  checkApiKey();
 
   // Set up event listeners
   const sendButton = document.getElementById("send-message");
@@ -58,6 +63,58 @@ function initializeChatInterface(): void {
 }
 
 /**
+ * Check if API key exists and show/hide API key input accordingly
+ */
+function checkApiKey(): void {
+  const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+  const appBody = document.getElementById("app-body");
+  const apiKeyContainer = document.getElementById("api-key-container");
+  
+  if (!apiKey) {
+    // Show API key input if no key is stored
+    if (appBody) appBody.style.display = "none";
+    if (apiKeyContainer) apiKeyContainer.style.display = "block";
+  } else {
+    // Show chat interface if key is already stored
+    if (appBody) appBody.style.display = "block";
+    if (apiKeyContainer) apiKeyContainer.style.display = "none";
+  }
+
+  // Set up API key form submission
+  const apiKeyForm = document.getElementById("api-key-form");
+  if (apiKeyForm) {
+    apiKeyForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      saveApiKey();
+    });
+  }
+}
+
+/**
+ * Save the API key from the input field
+ */
+function saveApiKey(): void {
+  const apiKeyInput = document.getElementById("api-key-input") as HTMLInputElement;
+  if (apiKeyInput && apiKeyInput.value.trim()) {
+    localStorage.setItem(API_KEY_STORAGE_KEY, apiKeyInput.value.trim());
+    
+    // Show chat interface after saving API key
+    const appBody = document.getElementById("app-body");
+    const apiKeyContainer = document.getElementById("api-key-container");
+    
+    if (appBody) appBody.style.display = "block";
+    if (apiKeyContainer) apiKeyContainer.style.display = "none";
+  }
+}
+
+/**
+ * Get the stored API key
+ */
+function getApiKey(): string {
+  return localStorage.getItem(API_KEY_STORAGE_KEY) || '';
+}
+
+/**
  * Send a message from the user input
  */
 function sendMessage(): void {
@@ -86,11 +143,35 @@ function sendMessage(): void {
  */
 async function processUserMessage(content: string): Promise<void> {
   try {
+    // Get API key
+    const apiKey = getApiKey();
+    
+    // Check if API key exists
+    if (!apiKey) {
+      const errorMessage: ChatMessage = {
+        content: "Please provide your Anthropic API key to continue.",
+        sender: "assistant" as "assistant",
+        timestamp: new Date(),
+      };
+      
+      addMessageToConversation(errorMessage);
+      addMessageToUI(errorMessage);
+      
+      // Show API key input
+      const appBody = document.getElementById("app-body");
+      const apiKeyContainer = document.getElementById("api-key-container");
+      
+      if (appBody) appBody.style.display = "none";
+      if (apiKeyContainer) apiKeyContainer.style.display = "block";
+      
+      return;
+    }
+    
     // Get document content to provide context
     const documentContent = await getDocumentContent();
     
-    // Get AI response
-    const { aiResponse, toolOperations } = await getAIResponse(content, documentContent);
+    // Get AI response with API key
+    const { aiResponse, toolOperations } = await getAIResponse(content, documentContent, apiKey);
     
     // Add the assistant's response to the conversation
     if (aiResponse) {
