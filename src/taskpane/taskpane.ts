@@ -55,8 +55,6 @@ function initializeChatInterface(): void {
       }
     });
   }
-
-  // Load past conversations if any
   loadPastConversations();
 }
 
@@ -77,16 +75,10 @@ function createNewConversation(): void {
     ],
   };
 
-  // Add to conversations array
   conversations.push(currentConversation);
-
-  // Save to local storage
   saveConversations();
 }
 
-/**
- * Generate a unique ID for conversations
- */
 function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).substring(2);
 }
@@ -99,7 +91,6 @@ function sendMessage(): void {
   const content = chatInput.value.trim();
 
   if (content && currentConversation) {
-    // Add user message
     const userMessage: ChatMessage = {
       content,
       sender: "user",
@@ -107,14 +98,8 @@ function sendMessage(): void {
     };
 
     currentConversation.messages.push(userMessage);
-
-    // Update UI
     addMessageToUI(userMessage);
-
-    // Clear input
     chatInput.value = "";
-
-    // Process the message and generate a response
     processUserMessage(content);
 
     // Update conversation title if it's the first user message
@@ -189,7 +174,6 @@ function addMessageToUI(message: ChatMessage): void {
   const chatMessages = document.getElementById("chat-messages");
 
   if (chatMessages) {
-    // Use the template to create a new message element
     const template = document.getElementById("message-template") as HTMLTemplateElement;
     if (!template) {
       console.error("Message template not found");
