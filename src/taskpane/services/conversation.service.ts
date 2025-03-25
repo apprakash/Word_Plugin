@@ -124,3 +124,12 @@ export function getCurrentConversation(): Conversation | null {
 export function getAllConversations(): Conversation[] {
   return conversations;
 }
+
+/**
+ * Clear all conversations and create a new one
+ */
+export function clearAllConversations(): void {
+  conversations = [];
+  saveConversations();
+  createNewConversation();
+}

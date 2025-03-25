@@ -2,7 +2,7 @@
 // Import services
 import { getAIResponse } from './services/ai.service';
 import { getDocumentContent, insertResponseToDocument } from './services/document.service';
-import { createNewConversation, addMessageToConversation, loadPastConversations } from './services/conversation.service';
+import { createNewConversation, addMessageToConversation, loadPastConversations, clearAllConversations } from './services/conversation.service';
 import { addMessageToUI, renderCurrentConversation, updatePastConversationsUI } from './services/ui.service';
 import { processToolOperations } from './services/tool.service';
 import { ChatMessage } from './models/interfaces';
@@ -37,6 +37,9 @@ function initializeChatInterface(): void {
   const sendButton = document.getElementById("send-message");
   const chatInput = document.getElementById("chat-input") as HTMLTextAreaElement;
   const newChatButton = document.getElementById("new-chat");
+  const clearAllButton = document.getElementById("clear-all-conversations");
+  const toggleConversationsButton = document.getElementById("toggle-conversations");
+  const pastConversationsContainer = document.querySelector(".past-conversations-container");
 
   if (sendButton && chatInput) {
     // Send message on button click
@@ -59,6 +62,33 @@ function initializeChatInterface(): void {
       renderCurrentConversation();
       updatePastConversationsUI();
     });
+  }
+
+  // Clear all conversations button
+  if (clearAllButton) {
+    clearAllButton.addEventListener("click", () => {
+      if (confirm("Are you sure you want to clear all conversations? This cannot be undone.")) {
+        clearAllConversations();
+        renderCurrentConversation();
+        updatePastConversationsUI();
+      }
+    });
+  }
+
+  // Toggle past conversations visibility
+  if (toggleConversationsButton && pastConversationsContainer) {
+    toggleConversationsButton.addEventListener("click", () => {
+      pastConversationsContainer.classList.toggle("hidden");
+      // Store the visibility preference in localStorage
+      const isHidden = pastConversationsContainer.classList.contains("hidden");
+      localStorage.setItem("past_conversations_hidden", isHidden.toString());
+    });
+
+    // Apply saved visibility preference
+    const isHidden = localStorage.getItem("past_conversations_hidden") === "true";
+    if (isHidden) {
+      pastConversationsContainer.classList.add("hidden");
+    }
   }
 }
 
