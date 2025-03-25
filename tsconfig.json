@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "jsx": "react",
+    "noEmitOnError": true,
+    "outDir": "lib",
+    "sourceMap": true,
+    "target": "es5",
+    "lib": [
+      "es2015",
+      "dom"
+    ],
+    "types": [
+      "office-js",
+      "node",
+      "office-runtime"
+    ],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src"
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "lib",
+    "lib-amd"
+  ],
+  "ts-node": { 
+    "files": true 
+  }
+}
